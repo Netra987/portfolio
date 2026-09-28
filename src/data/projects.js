@@ -8,7 +8,6 @@ export const projects = [
     featured: true,
     github: "https://github.com/Netra987/fakenews-mlops",
     demo: "https://fakenews-mlops.vercel.app",
-    apiDocs: "https://fakenews-mlops.onrender.com/docs",
     huggingFace: "https://huggingface.co/netra05/fakenews-distilbert",
     architecture: [
       { label: "Core Model", value: "DistilBERT (HuggingFace)" },

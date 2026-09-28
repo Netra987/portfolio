@@ -113,13 +113,6 @@ function Contact() {
               <span>Compose in Gmail</span>
               <span>↗</span>
             </a>
-            <a
-              href={`mailto:${contactInfo.email}`}
-              className="px-3.5 py-2.5 rounded-lg text-xs font-mono text-muted hover:text-white border border-white/5 hover:border-white/15 transition-all duration-200"
-              title="Open default system mail client"
-            >
-              Default Client ↗
-            </a>
           </div>
         </div>
       </motion.div>

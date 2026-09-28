@@ -161,20 +161,6 @@ function Projects() {
                       </a>
                     )}
 
-                    {/* Secondary API Docs (if applicable) */}
-                    {project.apiDocs && (
-                      <a
-                        href={project.apiDocs}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/10 bg-surface2/50 text-xs font-mono text-muted hover:text-white transition-all duration-200"
-                        aria-label={`API documentation for ${project.title}`}
-                      >
-                        <span>API Docs</span>
-                        <span>↗</span>
-                      </a>
-                    )}
-
                     {/* Interactive Sandbox Toggle */}
                     <button
                       onClick={() => toggleDemo(project.id)}
