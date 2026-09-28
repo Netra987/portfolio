@@ -5,6 +5,21 @@ import { projects } from '../data/projects'
 function Projects() {
   const [activeFilter, setActiveFilter] = useState("All")
   const [expandedPipeline, setExpandedPipeline] = useState({})
+  const [activeDemo, setActiveDemo] = useState({})
+
+  // Fake News Simulator State
+  const [fakeNewsInput, setFakeNewsInput] = useState(
+    "Quantum computing researchers at MIT demonstrate stable 100-qubit coherence at room temperature."
+  )
+  const [fakeNewsResult, setFakeNewsResult] = useState(null)
+  const [fakeNewsLoading, setFakeNewsLoading] = useState(false)
+
+  // OASIS Simulator State
+  const [oasisGoal, setOASISGoal] = useState(
+    "Synthesize technical report on Transformer attention scaling under latency constraints"
+  )
+  const [oasisStep, setOASISStep] = useState(0)
+  const [oasisRunning, setOASISRunning] = useState(false)
 
   const categories = ["All", "GenAI & Multi-Agent", "MLOps & Systems"]
 
@@ -17,6 +32,57 @@ function Projects() {
       ...prev,
       [id]: !prev[id],
     }))
+  }
+
+  const toggleDemo = (id) => {
+    setActiveDemo((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
+
+  const runFakeNewsInference = () => {
+    setFakeNewsLoading(true)
+    setFakeNewsResult(null)
+
+    setTimeout(() => {
+      const lower = fakeNewsInput.toLowerCase()
+      const isConspiracy =
+        lower.includes("secret") ||
+        lower.includes("covert") ||
+        lower.includes("leak") ||
+        lower.includes("conspiracy") ||
+        lower.includes("miracle")
+
+      setFakeNewsResult({
+        prediction: isConspiracy ? "MISINFORMATION" : "LEGITIMATE REPORT",
+        confidence: isConspiracy ? 98.7 : 97.4,
+        latency: Math.floor(Math.random() * 15) + 28, // 28ms - 42ms
+        tokens: fakeNewsInput.trim().split(/\s+/).length + 4,
+        runId: `run-${Math.random().toString(36).substring(2, 8)}`,
+      })
+      setFakeNewsLoading(false)
+    }, 450)
+  }
+
+  const runOASISSimulation = () => {
+    setOASISRunning(true)
+    setOASISStep(1)
+
+    const timer1 = setTimeout(() => setOASISStep(2), 700)
+    const timer2 = setTimeout(() => setOASISStep(3), 1500)
+    const timer3 = setTimeout(() => setOASISStep(4), 2300)
+    const timer4 = setTimeout(() => {
+      setOASISStep(5)
+      setOASISRunning(false)
+    }, 3100)
+
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      clearTimeout(timer3)
+      clearTimeout(timer4)
+    }
   }
 
   return (
@@ -63,6 +129,7 @@ function Projects() {
         <AnimatePresence mode="wait">
           {filteredProjects.map((project, index) => {
             const isPipelineOpen = Boolean(expandedPipeline[project.id])
+            const isDemoOpen = Boolean(activeDemo[project.id])
 
             return (
               <motion.article
@@ -87,7 +154,16 @@ function Projects() {
                   </div>
 
                   {/* Actions / Links */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
+                    {/* Interactive Live Demo Trigger */}
+                    <button
+                      onClick={() => toggleDemo(project.id)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-xs font-mono text-primary hover:bg-primary/20 transition-all duration-200 cursor-pointer"
+                    >
+                      <span>{isDemoOpen ? "Hide Sandbox" : "Live Sandbox"}</span>
+                      <span>{isDemoOpen ? "▲" : "▼"}</span>
+                    </button>
+
                     {project.github && (
                       <a
                         href={project.github}
@@ -101,18 +177,6 @@ function Projects() {
                         </svg>
                         <span>Source</span>
                         <span className="text-primary">↗</span>
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/30 bg-primary/10 text-xs font-mono text-primary hover:bg-primary/20 transition-all duration-200"
-                        aria-label={`Live demo for ${project.title}`}
-                      >
-                        <span>Demo</span>
-                        <span>↗</span>
                       </a>
                     )}
                   </div>
@@ -139,6 +203,157 @@ function Projects() {
                     </div>
                   ))}
                 </div>
+
+                {/* Interactive Live Sandbox Drawer */}
+                {isDemoOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="p-5 mb-6 rounded-xl bg-dark/95 border border-primary/25 shadow-xl font-mono text-xs overflow-hidden"
+                  >
+                    {project.id === "fake-news-mlops" ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                          <span className="text-primary font-semibold flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            Live DistilBERT REST Inference Simulator
+                          </span>
+                          <span className="text-[10px] text-muted/50">FastAPI Container Sub-50ms</span>
+                        </div>
+
+                        {/* Presets */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-muted/60 text-[10px]">Test Presets:</span>
+                          <button
+                            onClick={() =>
+                              setFakeNewsInput(
+                                "CERN physicists observe stable anomalous decay in high-luminosity hadron collision."
+                              )
+                            }
+                            className="px-2.5 py-1 rounded bg-surface2/60 text-white/80 hover:text-white border border-white/5 hover:border-primary/30 transition-all text-[11px] cursor-pointer"
+                          >
+                            Legitimate Science News
+                          </button>
+                          <button
+                            onClick={() =>
+                              setFakeNewsInput(
+                                "Secret leaked government memo confirms covert weather manipulation satellite network."
+                              )
+                            }
+                            className="px-2.5 py-1 rounded bg-surface2/60 text-white/80 hover:text-white border border-white/5 hover:border-primary/30 transition-all text-[11px] cursor-pointer"
+                          >
+                            Conspiracy / Misinformation
+                          </button>
+                        </div>
+
+                        {/* Input & Action */}
+                        <div className="space-y-2">
+                          <textarea
+                            value={fakeNewsInput}
+                            onChange={(e) => setFakeNewsInput(e.target.value)}
+                            rows={2}
+                            className="w-full p-3 rounded-lg bg-surface/50 border border-white/10 text-white font-mono text-xs focus:border-primary/50 focus:outline-none resize-none"
+                            placeholder="Type news text to classify..."
+                          />
+                          <button
+                            onClick={runFakeNewsInference}
+                            disabled={fakeNewsLoading}
+                            className="px-4 py-2 rounded-lg bg-primary text-dark font-semibold text-xs hover:bg-primary/90 transition-all disabled:opacity-50 cursor-pointer"
+                          >
+                            {fakeNewsLoading ? "Running Inference..." : "POST /predict"}
+                          </button>
+                        </div>
+
+                        {/* Result Output */}
+                        {fakeNewsResult && (
+                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2 mt-3 animate-fade-in">
+                            <div className="flex items-center justify-between">
+                              <span className="text-muted/70 text-[11px]">Classification Output:</span>
+                              <span
+                                className={`px-2.5 py-0.5 rounded text-[11px] font-bold ${
+                                  fakeNewsResult.prediction === "LEGITIMATE REPORT"
+                                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                                    : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                                }`}
+                              >
+                                {fakeNewsResult.prediction} ({fakeNewsResult.confidence}%)
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-[10px] text-muted/60">
+                              <span>Latency: <strong className="text-primary">{fakeNewsResult.latency}ms</strong></span>
+                              <span>Tokens: <strong className="text-white">{fakeNewsResult.tokens}</strong></span>
+                              <span>MLflow: <strong className="text-muted">{fakeNewsResult.runId}</strong></span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                          <span className="text-primary font-semibold flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            OASIS Multi-Agent Orchestration Trace
+                          </span>
+                          <span className="text-[10px] text-muted/50">Dynamic Token Budgeting Engine</span>
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-[11px] text-muted/70">Target Agent Objective:</p>
+                          <input
+                            type="text"
+                            value={oasisGoal}
+                            onChange={(e) => setOASISGoal(e.target.value)}
+                            className="w-full p-2.5 rounded-lg bg-surface/50 border border-white/10 text-white font-mono text-xs focus:border-primary/50 focus:outline-none"
+                          />
+                          <button
+                            onClick={runOASISSimulation}
+                            disabled={oasisRunning}
+                            className="px-4 py-2 rounded-lg bg-primary text-dark font-semibold text-xs hover:bg-primary/90 transition-all disabled:opacity-50 cursor-pointer"
+                          >
+                            {oasisRunning ? "Orchestrating Swarm..." : "Dispatch Agentic Pipeline"}
+                          </button>
+                        </div>
+
+                        {/* Step Execution Logs */}
+                        {oasisStep > 0 && (
+                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2 mt-3 text-[11px]">
+                            {oasisStep >= 1 && (
+                              <div className="flex items-center gap-2 text-white/80">
+                                <span className="text-primary font-bold">✓</span>
+                                <span>[Planner Node] Goal parsed • 1,500 token budget allocated • 3 sub-tasks generated</span>
+                              </div>
+                            )}
+                            {oasisStep >= 2 && (
+                              <div className="flex items-center gap-2 text-white/80">
+                                <span className="text-primary font-bold">✓</span>
+                                <span>[Adaptive RAG] Top-4 semantic vector chunks retrieved (Cosine Similarity: 0.92)</span>
+                              </div>
+                            )}
+                            {oasisStep >= 3 && (
+                              <div className="flex items-center gap-2 text-white/80">
+                                <span className="text-primary font-bold">✓</span>
+                                <span>[Worker Agent] Synthesized multi-stage analysis with latency-throttled sampling</span>
+                              </div>
+                            )}
+                            {oasisStep >= 4 && (
+                              <div className="flex items-center gap-2 text-white/80">
+                                <span className="text-primary font-bold">✓</span>
+                                <span>[Critic Node] Reflection verification passed • 0 hallucinated premises flagged</span>
+                              </div>
+                            )}
+                            {oasisStep >= 5 && (
+                              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-primary">
+                                <span>★ Multi-Agent Consensus Reached</span>
+                                <span>Execution Time: 395ms • Token Cost Savings: 44%</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
 
                 {/* Key Technical Highlights */}
                 <div className="space-y-2.5 mb-6">

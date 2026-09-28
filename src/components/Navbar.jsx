@@ -47,6 +47,14 @@ function Navbar() {
             </a>
           ))}
           <a
+            href="./resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 text-xs font-mono text-white/80 border border-white/10 rounded-md hover:border-primary/40 hover:text-primary transition-colors"
+          >
+            Resume ↗
+          </a>
+          <a
             href="mailto:allenetra@gmail.com"
             className="px-3.5 py-1.5 text-xs font-mono text-primary border border-primary/30 rounded-md hover:bg-primary/10 transition-colors"
           >
@@ -83,11 +91,20 @@ function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="pt-2 border-t border-white/5">
+          <div className="pt-2 border-t border-white/5 flex gap-2">
+            <a
+              href="./resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileOpen(false)}
+              className="flex-1 text-center py-2 text-xs font-mono text-white/80 border border-white/10 rounded-lg hover:border-primary/40 transition-colors"
+            >
+              Resume ↗
+            </a>
             <a
               href="mailto:allenetra@gmail.com"
               onClick={() => setMobileOpen(false)}
-              className="block text-center py-2 text-xs font-mono text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
+              className="flex-1 text-center py-2 text-xs font-mono text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
             >
               Hire Me
             </a>
