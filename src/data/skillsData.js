@@ -4,7 +4,7 @@ export const radarSkills = {
     "Deep Learning & NLP",
     "MLOps & CI/CD",
     "Data Science & Analytics",
-    "API & Model Serving",
+    "API Serving",
     "Core CS & Systems",
   ],
   datasets: [

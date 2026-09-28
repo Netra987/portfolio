@@ -38,6 +38,14 @@ function DataViz() {
   const radarOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 32,
+        right: 32,
+        top: 16,
+        bottom: 16,
+      },
+    },
     plugins: {
       legend: {
         position: "top",
@@ -82,6 +90,7 @@ function DataViz() {
         pointLabels: {
           color: "#94a3b8",
           font: { family: "'JetBrains Mono', monospace", size: 11 },
+          padding: 12,
         },
       },
     },

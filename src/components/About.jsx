@@ -65,7 +65,7 @@ function About() {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { number: "10+", label: "Projects Built" },
-                { number: "5+", label: "Technologies" },
+                { number: "20+", label: "Technologies" },
                 { number: "2+", label: "Years Coding" },
                 { number: "3", label: "Domains Explored" },
               ].map((stat) => (
