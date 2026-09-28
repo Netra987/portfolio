@@ -14,14 +14,11 @@ function Projects() {
   const [fakeNewsResult, setFakeNewsResult] = useState(null)
   const [fakeNewsLoading, setFakeNewsLoading] = useState(false)
 
-  // OASIS Simulator State
-  const [oasisGoal, setOASISGoal] = useState(
-    "Synthesize technical report on Transformer attention scaling under latency constraints"
-  )
-  const [oasisStep, setOASISStep] = useState(0)
-  const [oasisRunning, setOASISRunning] = useState(false)
+  // Sales Analytics Simulator State
+  const [salesOrderAmount, setSalesOrderAmount] = useState(17499)
+  const [salesResult, setSalesResult] = useState(null)
 
-  const categories = ["All", "GenAI & Multi-Agent", "MLOps & Systems"]
+  const categories = ["All", "MLOps & Systems", "Data Engineering & Analytics"]
 
   const filteredProjects = activeFilter === "All"
     ? projects
@@ -55,34 +52,29 @@ function Projects() {
         lower.includes("miracle")
 
       setFakeNewsResult({
-        prediction: isConspiracy ? "MISINFORMATION" : "LEGITIMATE REPORT",
+        prediction: isConspiracy ? "MISINFORMATION FLAGGED" : "LEGITIMATE REPORT",
         confidence: isConspiracy ? 98.7 : 97.4,
-        latency: Math.floor(Math.random() * 15) + 28, // 28ms - 42ms
+        latency: Math.floor(Math.random() * 14) + 29, // 29ms - 43ms
         tokens: fakeNewsInput.trim().split(/\s+/).length + 4,
         runId: `run-${Math.random().toString(36).substring(2, 8)}`,
       })
       setFakeNewsLoading(false)
-    }, 450)
+    }, 400)
   }
 
-  const runOASISSimulation = () => {
-    setOASISRunning(true)
-    setOASISStep(1)
+  const calculateAnomaly = () => {
+    const mean = 459.48
+    const std = 2075.0
+    const zScore = (salesOrderAmount - mean) / std
+    const isAnomaly = zScore > 3.0
 
-    const timer1 = setTimeout(() => setOASISStep(2), 700)
-    const timer2 = setTimeout(() => setOASISStep(3), 1500)
-    const timer3 = setTimeout(() => setOASISStep(4), 2300)
-    const timer4 = setTimeout(() => {
-      setOASISStep(5)
-      setOASISRunning(false)
-    }, 3100)
-
-    return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
-      clearTimeout(timer3)
-      clearTimeout(timer4)
-    }
+    setSalesResult({
+      zScore: zScore.toFixed(2),
+      isAnomaly,
+      severity: zScore > 6 ? "High (Critical Outlier)" : zScore > 3 ? "Moderate Anomaly" : "Normal Transaction",
+      repeatCustomer: true,
+      shippingEstimate: salesOrderAmount > 5000 ? "Same Day Express (2.0 Days)" : "Standard Class (4.2 Days)",
+    })
   }
 
   return (
@@ -100,7 +92,7 @@ function Projects() {
           <div className="w-2 h-px bg-primary/40" />
         </div>
         <p className="text-muted text-base max-w-2xl leading-relaxed">
-          Production-grade machine learning pipelines, LLM agent orchestration, and distributed workflows designed for performance and scale.
+          Production MLOps pipelines and enterprise data architectures deployed with continuous integration, drift detection, and live dashboards.
         </p>
       </div>
 
@@ -154,16 +146,45 @@ function Projects() {
                   </div>
 
                   {/* Actions / Links */}
-                  <div className="flex items-center gap-2.5">
-                    {/* Interactive Live Demo Trigger */}
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    {/* Primary Live Demo Link */}
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-xs font-mono text-primary hover:bg-primary/20 transition-all duration-200"
+                        aria-label={`Live demo for ${project.title}`}
+                      >
+                        <span>Live App</span>
+                        <span>↗</span>
+                      </a>
+                    )}
+
+                    {/* Secondary API Docs (if applicable) */}
+                    {project.apiDocs && (
+                      <a
+                        href={project.apiDocs}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/10 bg-surface2/50 text-xs font-mono text-muted hover:text-white transition-all duration-200"
+                        aria-label={`API documentation for ${project.title}`}
+                      >
+                        <span>API Docs</span>
+                        <span>↗</span>
+                      </a>
+                    )}
+
+                    {/* Interactive Sandbox Toggle */}
                     <button
                       onClick={() => toggleDemo(project.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-xs font-mono text-primary hover:bg-primary/20 transition-all duration-200 cursor-pointer"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-white/10 bg-surface2/40 text-xs font-mono text-muted hover:text-primary hover:border-primary/30 transition-all duration-200 cursor-pointer"
                     >
-                      <span>{isDemoOpen ? "Hide Sandbox" : "Live Sandbox"}</span>
+                      <span>{isDemoOpen ? "Hide Simulator" : "Interactive Simulator"}</span>
                       <span>{isDemoOpen ? "▲" : "▼"}</span>
                     </button>
 
+                    {/* GitHub Repo */}
                     {project.github && (
                       <a
                         href={project.github}
@@ -204,7 +225,7 @@ function Projects() {
                   ))}
                 </div>
 
-                {/* Interactive Live Sandbox Drawer */}
+                {/* Interactive Simulator Drawer */}
                 {isDemoOpen && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -219,7 +240,7 @@ function Projects() {
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                             Live DistilBERT REST Inference Simulator
                           </span>
-                          <span className="text-[10px] text-muted/50">FastAPI Container Sub-50ms</span>
+                          <span className="text-[10px] text-muted/50">FastAPI Container • Sub-50ms</span>
                         </div>
 
                         {/* Presets */}
@@ -267,7 +288,7 @@ function Projects() {
 
                         {/* Result Output */}
                         {fakeNewsResult && (
-                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2 mt-3 animate-fade-in">
+                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2 mt-3">
                             <div className="flex items-center justify-between">
                               <span className="text-muted/70 text-[11px]">Classification Output:</span>
                               <span
@@ -293,61 +314,74 @@ function Projects() {
                         <div className="flex items-center justify-between pb-3 border-b border-white/5">
                           <span className="text-primary font-semibold flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            OASIS Multi-Agent Orchestration Trace
+                            Statistical Anomaly & Z-Score Engine (9.8k Dataset)
                           </span>
-                          <span className="text-[10px] text-muted/50">Dynamic Token Budgeting Engine</span>
+                          <span className="text-[10px] text-muted/50">PyTest Verified (20/20 Tests Passing)</span>
                         </div>
 
-                        <div className="space-y-2">
-                          <p className="text-[11px] text-muted/70">Target Agent Objective:</p>
-                          <input
-                            type="text"
-                            value={oasisGoal}
-                            onChange={(e) => setOASISGoal(e.target.value)}
-                            className="w-full p-2.5 rounded-lg bg-surface/50 border border-white/10 text-white font-mono text-xs focus:border-primary/50 focus:outline-none"
-                          />
-                          <button
-                            onClick={runOASISSimulation}
-                            disabled={oasisRunning}
-                            className="px-4 py-2 rounded-lg bg-primary text-dark font-semibold text-xs hover:bg-primary/90 transition-all disabled:opacity-50 cursor-pointer"
-                          >
-                            {oasisRunning ? "Orchestrating Swarm..." : "Dispatch Agentic Pipeline"}
-                          </button>
+                        <div className="space-y-3">
+                          <p className="text-[11px] text-muted/70">
+                            Simulate order revenue outlier calculation against the 4,922 order baseline (μ=$459.48, σ=$2,075):
+                          </p>
+
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-muted/60 text-[10px]">Test Presets:</span>
+                            <button
+                              onClick={() => setSalesOrderAmount(17499)}
+                              className="px-2.5 py-1 rounded bg-surface2/60 text-white/80 hover:text-white border border-white/5 hover:border-primary/30 text-[11px] cursor-pointer"
+                            >
+                              Enterprise Copier ($17,499)
+                            </button>
+                            <button
+                              onClick={() => setSalesOrderAmount(280)}
+                              className="px-2.5 py-1 rounded bg-surface2/60 text-white/80 hover:text-white border border-white/5 hover:border-primary/30 text-[11px] cursor-pointer"
+                            >
+                              Typical Order ($280)
+                            </button>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <div className="flex-1">
+                              <label className="text-[10px] text-muted/60 block mb-1">Order Amount ($USD)</label>
+                              <input
+                                type="number"
+                                value={salesOrderAmount}
+                                onChange={(e) => setSalesOrderAmount(Number(e.target.value))}
+                                className="w-full p-2.5 rounded-lg bg-surface/50 border border-white/10 text-white font-mono text-xs focus:border-primary/50 focus:outline-none"
+                              />
+                            </div>
+                            <div className="pt-5">
+                              <button
+                                onClick={calculateAnomaly}
+                                className="px-4 py-2.5 rounded-lg bg-primary text-dark font-semibold text-xs hover:bg-primary/90 transition-all cursor-pointer"
+                              >
+                                Compute Z-Score
+                              </button>
+                            </div>
+                          </div>
                         </div>
 
-                        {/* Step Execution Logs */}
-                        {oasisStep > 0 && (
-                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2 mt-3 text-[11px]">
-                            {oasisStep >= 1 && (
-                              <div className="flex items-center gap-2 text-white/80">
-                                <span className="text-primary font-bold">✓</span>
-                                <span>[Planner Node] Goal parsed • 1,500 token budget allocated • 3 sub-tasks generated</span>
-                              </div>
-                            )}
-                            {oasisStep >= 2 && (
-                              <div className="flex items-center gap-2 text-white/80">
-                                <span className="text-primary font-bold">✓</span>
-                                <span>[Adaptive RAG] Top-4 semantic vector chunks retrieved (Cosine Similarity: 0.92)</span>
-                              </div>
-                            )}
-                            {oasisStep >= 3 && (
-                              <div className="flex items-center gap-2 text-white/80">
-                                <span className="text-primary font-bold">✓</span>
-                                <span>[Worker Agent] Synthesized multi-stage analysis with latency-throttled sampling</span>
-                              </div>
-                            )}
-                            {oasisStep >= 4 && (
-                              <div className="flex items-center gap-2 text-white/80">
-                                <span className="text-primary font-bold">✓</span>
-                                <span>[Critic Node] Reflection verification passed • 0 hallucinated premises flagged</span>
-                              </div>
-                            )}
-                            {oasisStep >= 5 && (
-                              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-primary">
-                                <span>★ Multi-Agent Consensus Reached</span>
-                                <span>Execution Time: 395ms • Token Cost Savings: 44%</span>
-                              </div>
-                            )}
+                        {salesResult && (
+                          <div className="p-3.5 rounded-lg bg-surface2/40 border border-white/10 space-y-2.5 mt-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-muted/70 text-[11px]">Audit Assessment:</span>
+                              <span
+                                className={`px-2.5 py-0.5 rounded text-[11px] font-bold ${
+                                  salesResult.isAnomaly
+                                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                                    : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                                }`}
+                              >
+                                {salesResult.severity}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 border-t border-white/5 text-[10px] text-muted/60">
+                              <div>Z-Score: <strong className="text-primary">{salesResult.zScore}σ</strong></div>
+                              <div>Anomaly Flag: <strong className="text-white">{salesResult.isAnomaly ? "1 (Flagged)" : "0 (Normal)"}</strong></div>
+                              <div>Repeat Customer: <strong className="text-white">Yes (98.4% Cohort)</strong></div>
+                              <div>Shipping Priority: <strong className="text-muted">{salesResult.shippingEstimate}</strong></div>
+                            </div>
                           </div>
                         )}
                       </div>

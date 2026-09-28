@@ -55,7 +55,7 @@ function Navbar() {
             Resume ↗
           </a>
           <a
-            href="mailto:allenetra@gmail.com"
+            href="#contact"
             className="px-3.5 py-1.5 text-xs font-mono text-primary border border-primary/30 rounded-md hover:bg-primary/10 transition-colors"
           >
             Hire Me
@@ -102,7 +102,7 @@ function Navbar() {
               Resume ↗
             </a>
             <a
-              href="mailto:allenetra@gmail.com"
+              href="#contact"
               onClick={() => setMobileOpen(false)}
               className="flex-1 text-center py-2 text-xs font-mono text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
             >

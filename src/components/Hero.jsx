@@ -78,12 +78,7 @@ function Hero() {
 
         <div className="flex flex-wrap gap-4">
           <Button href="#projects">View Projects</Button>
-          <Button variant="outline" href="./resume.pdf" target="_blank" rel="noopener noreferrer">
-            Resume ↗
-          </Button>
-          <Button variant="ghost" href="#contact">
-            Get in Touch
-          </Button>
+          <Button variant="outline" href="#contact">Get in Touch</Button>
         </div>
 
         <div className="flex items-center gap-6 mt-12">

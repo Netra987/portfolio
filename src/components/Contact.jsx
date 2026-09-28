@@ -16,7 +16,7 @@ function Contact() {
       label: "GitHub",
       identifier: "github.com/Netra987",
       href: contactInfo.github,
-      description: "Explore source code, MLOps repositories, and agentic orchestration experiments.",
+      description: "Explore open-source MLOps pipelines, sales analytics pipelines, and data systems.",
       cta: "View Repositories",
       icon: (
         <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -39,9 +39,9 @@ function Contact() {
     {
       label: "Email Dispatch",
       identifier: contactInfo.email,
-      href: `mailto:${contactInfo.email}`,
-      description: "Direct channel for interview invitations, technical inquiries, and research collaboration.",
-      cta: "Send Direct Mail",
+      href: `https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`,
+      description: "Fast response for technical interviews, engineering discussions, and role offers.",
+      cta: "Compose in Gmail",
       icon: (
         <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
@@ -65,7 +65,7 @@ function Contact() {
           <div className="w-2 h-px bg-primary/40" />
         </div>
         <p className="text-muted text-base max-w-2xl leading-relaxed">
-          Currently open to full-time Generative AI Engineer and Machine Learning Engineer positions. Reach out directly for role discussions or technical collaborations.
+          Currently open to full-time Generative AI Engineer, Machine Learning Engineer, and Data Systems positions. Reach out directly for role discussions.
         </p>
       </div>
 
@@ -89,7 +89,7 @@ function Contact() {
               {contactInfo.email}
             </h3>
             <p className="text-xs font-mono text-muted/60">
-              Based in {contactInfo.location} • Typical turnaround within 24 hours
+              Based in {contactInfo.location} • Typical response within 24 hours
             </p>
           </div>
 
@@ -105,10 +105,20 @@ function Contact() {
               {copied ? "✓ Copied to Clipboard" : "Copy Address"}
             </button>
             <a
-              href={`mailto:${contactInfo.email}`}
-              className="px-5 py-2.5 rounded-lg text-xs font-mono font-medium bg-primary text-dark hover:bg-primary/90 transition-all duration-200 hover:shadow-[0_0_20px_rgba(100,255,218,0.25)]"
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-2.5 rounded-lg text-xs font-mono font-medium bg-primary text-dark hover:bg-primary/90 transition-all duration-200 hover:shadow-[0_0_20px_rgba(100,255,218,0.25)] flex items-center gap-1.5"
             >
-              Compose Mail ↗
+              <span>Compose in Gmail</span>
+              <span>↗</span>
+            </a>
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="px-3.5 py-2.5 rounded-lg text-xs font-mono text-muted hover:text-white border border-white/5 hover:border-white/15 transition-all duration-200"
+              title="Open default system mail client"
+            >
+              Default Client ↗
             </a>
           </div>
         </div>
