@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Button from './ui/Button'
+import { contactInfo } from '../data/personal'
 
 const roles = [
   "Generative AI Engineer",
@@ -42,9 +43,9 @@ function Hero() {
   }, [displayed, isDeleting, currentRole])
 
   const socialLinks = [
-    { label: "GitHub", href: "https://github.com/Netra987" },
-    { label: "LinkedIn", href: "https://linkedin.com/in/netra-alle-14b73729a/" },
-    { label: "Email", href: "mailto:allenetra@gmail.com" },
+    { label: "GitHub", href: contactInfo.github },
+    { label: "LinkedIn", href: contactInfo.linkedin },
+    { label: "Email", href: `mailto:${contactInfo.email}` },
   ]
 
   return (

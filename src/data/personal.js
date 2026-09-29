@@ -23,7 +23,7 @@ export const personal = {
 }
 
 export const contactInfo = {
-  email: "allenetra@gmail.com",
+  email: "netraalle@gmail.com",
   github: "https://github.com/Netra987",
   linkedin: "https://linkedin.com/in/netra-alle-14b73729a/",
   location: "Pune, India",
